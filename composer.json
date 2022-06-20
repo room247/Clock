@@ -1,0 +1,36 @@
+{
+    "name": "room247/clock",
+    "description": "This is an interim release of the proposed PSR-20 Clock-Interface.",
+    "keywords": [
+        "psr20",
+        "clock",
+        "datetime",
+        "time"
+    ],
+    "license": "MIT",
+    "type": "library",
+    "authors": [{
+        "name": "Bastian Martin",
+        "email": "bm@room247.io"
+    }],
+    "require": {
+        "php": "^7.1|^8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "room247\\Clock\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "room247\\Clock\\": "tests"
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
+    }
+}
