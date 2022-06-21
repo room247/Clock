@@ -11,11 +11,13 @@ jobs:
     runs-on: ubuntu-20.04
 
     strategy:
-      fail-fast: true
       matrix:
-        directory: [src, types]
-
-    name: ${{ matrix.directory == 'src' && 'Source Code' || 'Types' }}
+        dependencies:
+          - "locked"
+        php-version:
+          - "8.0"
+        operating-system:
+          - "ubuntu-latest"
 
     steps:
       - name: Checkout code
