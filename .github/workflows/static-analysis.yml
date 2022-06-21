@@ -1,58 +1,39 @@
-name: "Static Analysis"
+name: static analysis
 
 on:
-  pull_request:
   push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * *'
 
 jobs:
-  static-analysis:
-    name: "Static Analysis"
-
-    runs-on: ${{ matrix.operating-system }}
+  src:
+    runs-on: ubuntu-20.04
 
     strategy:
+      fail-fast: true
       matrix:
-        dependencies:
-          - "locked"
-        php-version:
-          - "8.0"
-        operating-system:
-          - "ubuntu-latest"
+        directory: [src, types]
+
+    name: ${{ matrix.directory == 'src' && 'Source Code' || 'Types' }}
 
     steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v3"
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.19.0"
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          coverage: "none"
-          php-version: "${{ matrix.php-version }}"
-          ini-values: memory_limit=-1
-          tools: composer:v2, cs2pr
+          php-version: 8.0
+          tools: composer:v2
+          coverage: none
 
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: "Cache dependencies"
-        uses: "actions/cache@v3.0.3"
+      - name: Install dependencies
+        uses: nick-invision/retry@v1
         with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('**/composer.lock') }}"
-          restore-keys: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
+          timeout_minutes: 5
+          max_attempts: 5
+          command: composer update --prefer-stable --prefer-dist --no-interaction --no-progress
 
-      - name: "Install lowest dependencies"
-        if: ${{ matrix.dependencies == 'lowest' }}
-        run: "composer update --prefer-lowest --no-interaction --no-progress"
-
-      - name: "Install highest dependencies"
-        if: ${{ matrix.dependencies == 'highest' }}
-        run: "composer update --no-interaction --no-progress"
-
-      - name: "Install locked dependencies"
-        if: ${{ matrix.dependencies == 'locked' }}
-        run: "composer install --no-interaction --no-progress"
-
-      - name: "PHPStan"
-        run: "make phpstan"
+      - name: Execute type checking
+        run: vendor/bin/phpstan --configuration="phpstan.${{ matrix.directory }}.neon.dist"
