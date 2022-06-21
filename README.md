@@ -1,7 +1,8 @@
 # Clock
 
-[![Latest Stable Version](http://poser.pugx.org/room247/clock/v)](https://packagist.org/packages/room247/clock)
-[![Total Downloads](http://poser.pugx.org/room247/clock/downloads)](https://packagist.org/packages/room247/clock)
+<a href="https://packagist.org/packages/room247/clock"><img src="https://img.shields.io/packagist/dt/room247/clock" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/room247/clock"><img src="https://img.shields.io/packagist/v/room247/clock" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/room247/clock"><img src="https://img.shields.io/packagist/l/room247/clock" alt="License"></a>
 [![PHPUnit tests](https://github.com/room247/Clock/actions/workflows/tests.yml/badge.svg)](https://github.com/room247/Clock/actions/workflows/tests.yml)
 
 There once has been an implementation of the proposed [PSR-20](https://github.com/php-fig/fig-standards/blob/master/proposed/clock.md) Clock interface already but it has been removed from GitHub for some reason, so I decided to provide an (possibly interim) implementation. Credits go to the former Author.
